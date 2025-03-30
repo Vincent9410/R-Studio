@@ -2,6 +2,8 @@
 title: "Assignment1"
 author: "Vincent Wang"
 data: "2025-03-30"
+params:
+  data_path: "Data/co-emissions-per-capita-vs-fossil-fuel-consumption-per-capita.csv"
 format: 
   html:
     fontsize: 13pt 
@@ -16,6 +18,7 @@ format:
     citations-hover: true
     crossrefs-hover: true
     code-overflow: wrap
+    anchor-sections: true
 
   pdf:              # PDF输出配置
     documentclass: report  # LaTeX文档类型
@@ -32,7 +35,16 @@ knitr:
 execute:
   code-overlay:
     margin: "auto"
-      
+    
+crossref:
+  fig-title: Figure     # (default is "Figure")
+  tbl-title: Table     # (default is "Table")
+  fig-prefix: Figure   # (default is "Figure")
+  tbl-prefix: Table 
+  labels: arabic
+  
+  
+fig-cap-location: bottom
 number-sections: true
 editor: visual
 ---
@@ -49,19 +61,12 @@ With the further deterioration of global warming since the 21st century and the 
 
 ## Research Question
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
-
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
+In the face of increasingly serious environmental problems in this century, this report studies the carbon emission levels of countries around the world before and after the signing of the Paris Agreement by obtaining data on carbon dioxide emissions and fossil fuel use in various countries over the past 20 years. At the same time, this report will also study the carbon emission trends of countries with different income levels based on the World Bank's income level classification of countries.
 
 ## Dataset Introduction
+
+The data used in this report records the carbon emissions and fossil fuel use levels of major countries in the world from 2004 to 2023. The data comes from [Our World in Data](https://ourworldindata.org/) and includes six indicators such as "per capita carbon dioxide emissions", "per capita fossil fuel use", and "historical population", covering 20 major countries in the world. The GDP of these countries in 2023 accounts for more than 70% of the world's total GDP, so it can fully represent the global carbon emissions level. The original data has been archived in the project repository.
+
+![TEST](images/test.png){#fig-1}
+
+See @fig-1 here
