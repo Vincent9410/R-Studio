@@ -1,0 +1,67 @@
+---
+title: "Assignment1"
+author: "Vincent Wang"
+data: "2025-03-30"
+format: 
+  html:
+    fontsize: 13pt 
+    toc: true        # 生成目录
+    toc-depth: 3     # 目录层级深度
+    toc-float: true  # 浮动目录（网页侧边栏）
+    toc-location: body
+    toc-title: Contents
+    theme: cosmo     # Bootstrap主题（可选cerulean/sketchy等）
+    link-external-icon: true
+    link-external-newwindow: true
+    citations-hover: true
+    crossrefs-hover: true
+    code-overflow: wrap
+
+  pdf:              # PDF输出配置
+    documentclass: report  # LaTeX文档类型
+    papersize: a4           # 纸张尺寸
+    linestretch: 1.25       # 行间距倍数
+    geometry:               # 页面边距
+      - top=2cm
+      - bottom=2cm
+    fontsize: 13pt 
+knitr:
+  opts_chunk:
+    out.width: "70%"
+    fig.align: "center"
+execute:
+  code-overlay:
+    margin: "auto"
+      
+number-sections: true
+editor: visual
+---
+
+```{r setup, output = FALSE, include = TRUE, echo = FALSE, warning=FALSE}
+library(tidyverse)
+library(knitr)
+
+```
+
+## Introduction
+
+With the further deterioration of global warming since the 21st century and the important role of greenhouse gas emissions in the greenhouse effect, governments around the world have deeply realized that it is time to reduce greenhouse gas emissions through international cooperation to gradually curb the rapid rise in global average temperature. In this context, the signing of the Paris Agreement in 2015 became an important milestone for countries around the world to jointly curb global warming and reduce greenhouse gas emissions.As we all know, the large amount of carbon dioxide gas produced by the combustion of fossil fuels is one of the main causes of global warming. Therefore, this report will mainly explore the fossil fuel use and carbon dioxide emissions in countries around the world before and after the signing of the Paris Agreement.
+
+## Research Question
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+## Dataset Introduction
