@@ -1,72 +1,192 @@
 ---
-title: "Assignment1"
-author: "Vincent Wang"
-data: "2025-03-30"
-params:
-  data_path: "Data/co-emissions-per-capita-vs-fossil-fuel-consumption-per-capita.csv"
+title: "Analysis of trends in Australia’s carbon dioxide emissions and fossil fuel use based on data visualization"
+author: "your name or student number"
 format: 
   html:
-    fontsize: 13pt 
-    toc: true        # 生成目录
-    toc-depth: 3     # 目录层级深度
-    toc-float: true  # 浮动目录（网页侧边栏）
-    toc-location: body
-    toc-title: Contents
-    theme: cosmo     # Bootstrap主题（可选cerulean/sketchy等）
-    link-external-icon: true
-    link-external-newwindow: true
-    citations-hover: true
-    crossrefs-hover: true
-    code-overflow: wrap
-    anchor-sections: true
-
-  pdf:              # PDF输出配置
-    documentclass: report  # LaTeX文档类型
-    papersize: a4           # 纸张尺寸
-    linestretch: 1.25       # 行间距倍数
-    geometry:               # 页面边距
-      - top=2cm
-      - bottom=2cm
-    fontsize: 13pt 
+    fontsize: 13pt   
+    toc: true        
+    toc-depth: 3     
+    toc-location: body   
+    toc-title: Contents  
+    theme: cosmo     
+    link-external-icon: true  
+    link-external-newwindow: true  
+    crossrefs-hover: true    
+    code-overflow: wrap      
+    df-print: kable          
+  
+  pdf:             
+    toc: true
+    toc-depth: 3
+    toc-title: Contents  
+    papersize: a4           
+    linestretch: 1.25       
+    geometry:               
+      - top = 20mm
+      - bottom = 20mm
+      - left = 20mm
+      - right = 20mm
+    fontsize: 10pt 
+    df-print: kable         
+    
 knitr:
   opts_chunk:
-    out.width: "70%"
-    fig.align: "center"
+    out.width: "70%"       
+    fig.align: "center"    
 execute:
+  echo: true
+  output: true
   code-overlay:
     margin: "auto"
-    
 crossref:
-  fig-title: Figure     # (default is "Figure")
-  tbl-title: Table     # (default is "Table")
-  fig-prefix: Figure   # (default is "Figure")
-  tbl-prefix: Table 
-  labels: arabic
-  
-  
-fig-cap-location: bottom
-number-sections: true
+  fig-title: Figure     
+  tbl-title: Table      
+  labels: arabic       
+fig-cap-location: bottom  
+number-sections: true     
 editor: visual
 ---
 
-```{r setup, output = FALSE, include = TRUE, echo = FALSE, warning=FALSE}
+```{r setup}
+#| output: false
+#| include: false
+#| echo: false
+#| message: false
+#| error: true
+#| warning: false
+
 library(tidyverse)
 library(knitr)
 
 ```
 
-## Introduction
+# Introduction
 
-With the further deterioration of global warming since the 21st century and the important role of greenhouse gas emissions in the greenhouse effect, governments around the world have deeply realized that it is time to reduce greenhouse gas emissions through international cooperation to gradually curb the rapid rise in global average temperature. In this context, the signing of the Paris Agreement in 2015 became an important milestone for countries around the world to jointly curb global warming and reduce greenhouse gas emissions.As we all know, the large amount of carbon dioxide gas produced by the combustion of fossil fuels is one of the main causes of global warming. Therefore, this report will mainly explore the fossil fuel use and carbon dioxide emissions in countries around the world before and after the signing of the Paris Agreement.
+With the rapid development of human society, the negative impact of the greenhouse effect has gradually begun to show its power around the world, which has made more and more countries realize that it is time to curb the global warming caused by the greenhouse effect through international cooperation. Against this background, a series of international agreements such as such as the Kyoto Protocol, the Paris Agreement and the United Nations Sustainable Development Goals, which aim to slow down the trend of global warming by reducing greenhouse gas emissions, have emerged and have been signed and strictly implemented by significant countries around the world. As one of the world's major economies, Australia has also signed the above important international agreements and has continued to fulfill its major responsibility of energy conservation and emission reduction in the following decades. This report will focus on studying and analyzing whether Australia's energy conservation and emission reduction effects in this century are consistent with its publicity.
 
-## Research Question
+# Research Question
 
-In the face of increasingly serious environmental problems in this century, this report studies the carbon emission levels of countries around the world before and after the signing of the Paris Agreement by obtaining data on carbon dioxide emissions and fossil fuel use in various countries over the past 20 years. At the same time, this report will also study the carbon emission trends of countries with different income levels based on the World Bank's income level classification of countries.
+Based on the above introduction, and considering that fossil fuel combustion is recognized as one of the main sources of greenhouse gases, and carbon dioxide is the main component of greenhouse gases, this report will mainly analyze Australia's carbon dioxide emissions and fossil fuel use trends in this century. At the same time, this report will also compare Australia's carbon dioxide emissions levels before and after the signing of the Kyoto Protocol to study whether it has strictly fulfilled its emission reduction obligations as a signatory country.
 
-## Dataset Introduction
+# Dataset Introduction
 
-The data used in this report records the carbon emissions and fossil fuel use levels of major countries in the world from 2004 to 2023. The data comes from [Our World in Data](https://ourworldindata.org/) and includes six indicators such as "per capita carbon dioxide emissions", "per capita fossil fuel use", and "historical population", covering 20 major countries in the world. The GDP of these countries in 2023 accounts for more than 70% of the world's total GDP, so it can fully represent the global carbon emissions level. The original data has been archived in the project repository.
+The data used in this report records the carbon emissions and fossil fuel use levels of major countries around the world from 1965 to 2023. The data comes from [Our World in Data](https://ourworldindata.org/grapher/co-emissions-per-capita-vs-fossil-fuel-consumption-per-capita?time=earliest..latest) and includes seven variables such as "per capita carbon dioxide emissions", "per capita fossil fuel use", and "historical population". For details of the variables, see @tbl-tables. The original data has been archived in the project repository and here is the [location of the data](Data/co-emissions-per-capita-vs-fossil-fuel-consumption-per-capita.csv).
 
-![TEST](images/test.png){#fig-1}
+```{r}
+#| warning: false
+#| message: false
+#| label: tbl-tables
+#| tbl-cap: "This table contains all the variable names and corresponding descriptions in the data set selected for this report."
+# Load data --------------------------------------------------------------------
+df <- read_csv(
+  "Data/co-emissions-per-capita-vs-fossil-fuel-consumption-per-capita.csv"
+)
 
-See @fig-1 here
+# Clean data -------------------------------------------------------------------
+df_clean <- df |> 
+  filter(!is.na(`Annual CO₂ emissions (per capita)`)) |> 
+  filter(!is.na(`Fossil fuels per capita (kWh)`)) |> 
+  filter(!is.na(`Population (historical)`)
+)
+
+# Create a variable table ------------------------------------------------------ 
+variable_desc <- data_frame (
+  Variable = c("Entity", 
+               "Code", 
+               "Year", 
+               "Annual CO2 emissions (per capita)", 
+               "Fossil fuels per capita (kWh)", 
+               "Population(historical)", 
+               "World Bank's income classification"),
+  Description = c("Country/Region Name",
+                  "ISO 3-letter Country Code",
+                  "Year of Data Recording",
+                  "Annual CO2 Emissions per Capita (tonnes)",
+                  "Fossil Fuel Consumption per Capita (kWh)",
+                  "Historical Population Estimates",
+                  "World Bank Income Classification")
+)
+
+# Use {kable()} ----------------------------------------------------------------
+knitr::kable(
+  variable_desc,
+  col.names = c("Variable Names", "Variable Description"),
+  align = c("l", "r"),
+  booktabs = TRUE
+) 
+```
+
+## Dataset Description
+
+The dataset contains a total of `r nrow(df_clean)` observations and `r ncol(df_clean)` variables.
+
+![Inline R code](images/inline_code.png){#fig-inlinecode}
+
+See @fig-inlinecode for the detail of the *inline R code* used.
+
+```{r}
+#| warning: false
+#| message: false
+#| label: tbl-tables1
+#| tbl-cap: "First 2 rows of the data"
+#| df-print: kable
+#| include: true
+
+head(df_clean,2)
+```
+
+See @tbl-tables1 for the detail of the first 2 rows of the data and the types of variables in the dataset.
+
+# Results
+
+```{r}
+#| echo: true
+#| layout-ncol: 2
+#| label: fig-tables3
+#| fig-cap: "Trend Analysis"
+#| fig-subcap: 
+#|      - "Annual CO2 emissions (Per capita)"
+#|      - "Annual fossil fuels (Per capita)"
+
+# Filter -----------------------------------------------------------------------
+df_australia <- df_clean |> 
+            filter(Entity == "Australia") |> 
+            filter(Year >= 2000)
+
+# Plot1-------------------------------------------------------------------------
+df_australia |> 
+  ggplot(aes(x = factor(Year), y = `Annual CO₂ emissions (per capita)`)) +
+  geom_bar(
+    stat = "identity", 
+    width = 0.7,
+    fill = "orange") +
+  labs(
+    x = "Year",
+    y = "Annual CO2 emissions (per capita)") +
+  theme_light(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45),
+    axis.title = element_text(size = 13),           
+    panel.grid.major.x = element_blank(),
+  )
+
+# Plot2-------------------------------------------------------------------------
+df_australia |> 
+  ggplot(aes(x = factor(Year), y = `Fossil fuels per capita (kWh)`)) +
+  geom_bar(
+    stat = "identity", 
+    width = 0.7,
+    fill = "green") +
+  labs(
+    x = "Year",
+    y = "Fossil fuels per capita (kWh)") +
+  theme_light(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45),
+    axis.title = element_text(size = 13),           
+    panel.grid.major.x = element_blank(),            
+  )
+```
+
+-   *By observing @fig-tables3-1, we can clearly see the trend of Australia's carbon dioxide emissions during the research period of this report. First, during the period 2000-2007, Australia's annual per capita carbon dioxide emissions increased slightly, but after 2007, they began to decline year by year. According to records, Australia officially signed the Kyoto Protocol in 2007 and became one of the signatories. The trend of Australia's carbon dioxide emissions obtained from the analysis of the above figure in this report shows that Australia's carbon dioxide emissions have been declining year by year since 2007. Therefore, it can be confirmed that Australia has strictly fulfilled its emission reduction obligations after signing the Kyoto Protocol as it promised and advertised.*
+-   *By observing @fig-tables3-2, we can find that the changing trend of Australia's annual per capita fossil fuel use is basically consistent with the changing trend of annual per capita carbon dioxide emissions, also showing a trend of first increasing slightly and then starting to decline year by year. The only difference is that the turning point of the trend change came in 2008 instead of 2007.*

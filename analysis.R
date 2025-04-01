@@ -6,6 +6,9 @@ head(df)
 
 View(df)
 
+unique(df$Entity)
+unique(df$Year)
+
 df_new <- df %>% filter(!is.na(`Annual CO₂ emissions (per capita)`)) %>% 
   filter(!is.na(`Fossil fuels per capita (kWh)`)) %>% 
   filter(!is.na(`Population (historical)`)) %>% 
@@ -33,3 +36,41 @@ knitr::kable(
   align = c("l", "c"),
   booktabs = TRUE
 ) 
+
+kable(sapply(df, class))
+
+head(df_new)
+
+df_new1 <- df_new %>% filter(Year >= 2004 & Year <= 2023) %>% 
+  mutate(Income_Classification = factor(`World Bank's income classification`)) %>% 
+  rename(Annual_CO2_Emission_per_captial = "Annual CO₂ emissions (per capita)")
+View(df_new1)
+
+df_agg <- df_new1 %>%
+  group_by(Year, Income_Classification) %>%
+  summarize(
+    Mean_CO2 = mean(Annual_CO2_Emission_per_captial, na.rm = TRUE),
+    .groups = 'drop'
+  ) 
+
+
+
+#View(df_agg)
+
+
+ggplot(df_agg, 
+       aes(x = factor(Year), 
+           y = Mean_CO2, 
+           fill = Income_Classification)) +
+  geom_bar(stat = "identity", 
+           position = position_dodge2(preserve = "single", width = 0.9),
+           width = 0.7) +
+#  scale_fill_brewer(palette = "Set2") +  # 使用ColorBrewer配色
+  labs(title = "Annual CO2 emissions (per capita)(2004-2023)",
+       subtitle = "World Bank's income classification",
+       x = "Year",
+       y = "Annual CO2 emissions (per capita)",
+       fill = "Income_Classification") +
+#  theme_minimal(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+        legend.position = "top")  # 倾斜年份标签
